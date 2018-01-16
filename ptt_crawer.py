@@ -8,9 +8,9 @@ ONLY_TODAY = 0
 NOPUSH= 1
 ###
 PTT_URL = 'https://www.ptt.cc'
-BOARD_URL = '/bbs/Gossiping/index.html'
-# BOARD_URL = '/bbs/NTU/index.html'
-output_path = 'Gossiping_10000.json'
+# BOARD_URL = '/bbs/Gossiping/index.html'
+BOARD_URL = '/bbs/NTU/index.html'
+output_path = 'NTU_2370.json'
 
 today = time.strftime("%m/%d").lstrip('0')  # 今天日期, 去掉開頭的 '0' 以符合 PTT 網站格式
 def get_web_page(url):
@@ -35,9 +35,11 @@ def get_article(url):
     errcnt = 0
     while main_content == None:
         errcnt += 1
-        if errcnt > 49:
+        if errcnt > 5:
             return False
-        print("ERROR QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ")
+            print("QQQQQ  Can not get this article")
+        print("ERROR retrying connect : {}".format(errcnt))
+        time.sleep(2)
         resp = requests.get(
         url=url,
         cookies={'over18': '1'}
@@ -55,8 +57,6 @@ def get_article(url):
     # print(filtered)
     if len(filtered) == 0:
         return False
-    # filtered.pop()  # delete URL
-    # filtered.pop()  # delete '--'
     # print(main_content.text)
     # print(filtered)
     final = ''.join(filtered)
@@ -123,7 +123,7 @@ def main():
     currrent_page = get_web_page(current_url)
     articles = []
     cnt = 1
-    for i in range(10000):
+    for i in range(2370):
         print('Processing #{} page, current articles number : {}  time used : {}'.format(cnt, len(articles), time.time()-init_time))
              
         cnt += 1
@@ -133,6 +133,10 @@ def main():
         articles.extend(tmp_artciles)
         current_url = PTT_URL + prev_url
         currrent_page = get_web_page(current_url)
+        if i % 500 == 0 and i != 0:
+            print("Saving article for {} pages".format(i))
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(articles, f, indent=2, sort_keys=True, ensure_ascii=False)
         
     
 
