@@ -3,14 +3,15 @@ import time
 import json
 from bs4 import BeautifulSoup
 import re
-###
+### config variables
 ONLY_TODAY = 0
 NOPUSH= 1
+MaxPageNum = 2370
+BOARD_URL = '/bbs/NTU/index.html'
+output_path = 'NTU_2370.json'
 ###
 PTT_URL = 'https://www.ptt.cc'
 # BOARD_URL = '/bbs/Gossiping/index.html'
-BOARD_URL = '/bbs/NTU/index.html'
-output_path = 'NTU_2370.json'
 
 today = time.strftime("%m/%d").lstrip('0')  # 今天日期, 去掉開頭的 '0' 以符合 PTT 網站格式
 def get_web_page(url):
@@ -123,7 +124,7 @@ def main():
     currrent_page = get_web_page(current_url)
     articles = []
     cnt = 1
-    for i in range(2370):
+    for i in range(MaxPageNum):
         print('Processing #{} page, current articles number : {}  time used : {}'.format(cnt, len(articles), time.time()-init_time))
              
         cnt += 1

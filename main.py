@@ -9,13 +9,14 @@ from bs4 import BeautifulSoup
 from operator import itemgetter
 
 from ptt_crawer import get_article
-###
+### config variables
+# input_path = 'gossiping_10000.json'
 input_path = 'gossiping.json'
-# input_path = 'gossiping.json'
-docunmentNUM = None
 keyWordNUM = 50
 maxResultNUM = 20
 rankThres = 5
+###
+docunmentNUM = None
 PTT_URL = 'https://www.ptt.cc'
 raw_dict = {}
 ###
@@ -25,7 +26,7 @@ def init():
     file = open(input_path, 'r', encoding = 'utf8')
     raw_dict = json.load(file)
     docunmentNUM = len(raw_dict)
-    print(" - done")
+    print(" - done, number of articles :",docunmentNUM)
 
 
 def main():
@@ -72,6 +73,7 @@ def gen_vocab_count_and_idf():
 
 def gen_seg_list(save = 0):
     # just need to run once if you save it
+    print("Generating seg_list")
     for it in raw_dict:
         seg_list = jieba.lcut(it['article'])
         it['seg'] = seg_list
@@ -79,20 +81,25 @@ def gen_seg_list(save = 0):
         print("saving")
         file = open(input_path, 'w', encoding = 'utf8')
         json.dump(raw_dict, file)
-        print("Generate seg list DONE!!")    
+        # print("Generate seg list DONE!!")    
+    print(' - done')
 
 def cal_tfidf(save = 0):
+    print("Generating tags for all articles")
     global raw_dict
     cnt = 0
     for it in raw_dict:
         if cnt % 1000 == 0:
-            print('Processing : {}/{}'.format(cnt, len(raw_dict)))
+            print(' - Processing : {}/{}'.format(cnt, len(raw_dict)))
         cnt += 1
         tags = jieba.analyse.extract_tags(it['article'], keyWordNUM)
         # print(it['title'] + ' : ' + ','.join(tags))
         it['tags'] = tags
     if save:
         print("saving")
+        print("Poping \'seg\' elements in dict")
+        for it in raw_dict:
+            it['seg'].pop()
         file = open('./final.json', 'w', encoding = 'utf8')
         json.dump(raw_dict, file, indent=2, sort_keys=True, ensure_ascii=False)
         print("DONE!!")     
@@ -119,21 +126,23 @@ def get_similiar_article(url, output_path = './result.txt', save = 1):
                 break
             ptr = raw_dict[idx]
             file.write("Rank : {}\nTitle : {}\n".format(ptr['rank'], ptr['title']))
-            file.write("Href : {}\n".format(ptr['href']))
+            file.write("Href : {}\nDate : {}\n".format(ptr['href'], ptr['date']))
             file.write("{}\n".format(ptr['article']))
             file.write('\n\n-----------------------------------------\n\n')
 
 if __name__ == '__main__':
     # main()
     init()
-    # gen_seg_list()
-    # gen_vocab_count_and_idf()
-    ##
-    ##
+
+    ### follow two functions only need to run once every time you change a new corpus
+    gen_seg_list()  
+    gen_vocab_count_and_idf()
+    ###
+    
     jieba.analyse.set_idf_path("./myidf.txt")        
-    cal_tfidf(0)
-    get_similiar_article('https://www.ptt.cc/bbs/Gossiping/M.1515994151.A.030.html','1.txt')
+    cal_tfidf(1)
+    get_similiar_article('https://www.ptt.cc/bbs/NTU/M.1515831748.A.B4B.html','1.txt')
     print('----------------------------------------------')
-    get_similiar_article('https://www.ptt.cc/bbs/Gossiping/M.1515992502.A.9B3.html', '2.txt')
+    get_similiar_article('https://www.ptt.cc/bbs/NTU/M.1515490276.A.8E2.html', '2.txt')
     print('----------------------------------------------')
-    get_similiar_article('http://www.ptt.cc/bbs/Gossiping/M.1516017551.A.64D.html', '3.txt')
+    get_similiar_article('https://www.ptt.cc/bbs/NTU/M.1514881852.A.AFE.html', '3.txt')
