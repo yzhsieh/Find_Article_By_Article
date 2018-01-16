@@ -11,7 +11,7 @@ from operator import itemgetter
 from ptt_crawer import get_article
 ### config variables
 # input_path = 'gossiping_10000.json'
-input_path = 'gossiping.json'
+input_path = 'NTU_2370.json'
 keyWordNUM = 50
 maxResultNUM = 20
 rankThres = 5
@@ -97,9 +97,11 @@ def cal_tfidf(save = 0):
         it['tags'] = tags
     if save:
         print("saving")
-        print("Poping \'seg\' elements in dict")
-        for it in raw_dict:
-            it['seg'].pop()
+        if 'seg' in raw_dict[0]:
+            print("Poping \'seg\' elements in dict")
+            for it in raw_dict:
+                # print(it['seg'])
+                it['seg'].pop()
         file = open('./final.json', 'w', encoding = 'utf8')
         json.dump(raw_dict, file, indent=2, sort_keys=True, ensure_ascii=False)
         print("DONE!!")     
@@ -115,10 +117,11 @@ def get_similiar_article(url, output_path = './result.txt', save = 1):
                 rank += 1
         it['rank'] = rank
     raw_dict = sorted(raw_dict, key=itemgetter('rank'), reverse=True)
-    for idx in range(20):
-        print("{}, (rank : {})".format(raw_dict[idx]['title'], raw_dict[idx]['rank']))
-        print(PTT_URL + raw_dict[idx]['href'])
-        print(raw_dict[idx]['tags'])
+    # for idx in range(20):
+    #     print("{}, (rank : {})".format(raw_dict[idx]['title'], raw_dict[idx]['rank']))
+    #     print(PTT_URL + raw_dict[idx]['href'])
+    #     print(raw_dict[idx]['tags'])
+    print("Saving result")
     if save:
         file = open(output_path, 'w', encoding='utf8')
         for idx in range(maxResultNUM):
