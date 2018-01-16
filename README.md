@@ -79,10 +79,11 @@ maxResultNUM = 20		#輸出相關文章時，最多可以有多少結果
 rankThres = 5			#輸出相關文章時，rank至少要多少
 ```
 ### Data set
-[PTT NTU板約18000篇文章](https://drive.google.com/drive/folders/1xHPEqWP3_WONVXe20CA7CSibQ_PWhXxo?usp=sharing)
-[PTT NTU板約47000篇文章](https://drive.google.com/drive/folders/135SzvoRDF2bva9gmd4iITBeFKKMgqnB0?usp=sharing)
-[PTT Gossip板約19000篇文章](https://drive.google.com/drive/folders/1G4DpHrtVvafY-FTMnXfRKaAiyeZsDmzq?usp=sharing)
-[PTT Gossip版約180000篇文章](https://drive.google.com/drive/folders/1DiAwSjRNBtbsXxyaxQHSy2CM0Rqknnya?usp=sharing)
+- [PTT NTU板約18000篇文章](https://drive.google.com/drive/folders/1xHPEqWP3_WONVXe20CA7CSibQ_PWhXxo?usp=sharing)
+- [PTT NTU板約47000篇文章](https://drive.google.com/drive/folders/135SzvoRDF2bva9gmd4iITBeFKKMgqnB0?usp=sharing)
+- [PTT Gossip板約19000篇文章](https://drive.google.com/drive/folders/1G4DpHrtVvafY-FTMnXfRKaAiyeZsDmzq?usp=sharing)
+- [PTT Gossip版約180000篇文章](https://drive.google.com/drive/folders/1DiAwSjRNBtbsXxyaxQHSy2CM0Rqknnya?usp=sharing)
+
 
 ## Reference
 - https://github.com/fxsjy/jieba
